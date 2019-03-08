@@ -1,0 +1,119 @@
+/*NB this CSS style sheet is one I wrote for my earlier assignment (HTML and CSS) and adapted*/
+
+
+/*The HTML5 semantic elements below (header, nav, section, footer) I saw on the tutorial slide (lecture 5) and then modified*/
+
+header {background-color:darkseagreen;
+height:6%;
+width:100%;
+padding-bottom:10px;
+margin-bottom:  10px;
+float:left;}
+
+body{
+    
+    background-color:lightcyan;
+}
+
+section{
+    width:95%;
+    height:10%;
+    float:left;
+    padding:5px;
+    margin-left:  60px;
+    clear:left;
+    font-family: 'Slabo', serif;
+    overflow:auto;
+}
+
+footer { background-color:darkseagreen;
+    color:white;
+    text-align: right;
+    height:30px;
+    padding: 5px;
+        clear:both;
+    width:100%;
+    
+    top:20px;
+    margin-right: 10px;
+}
+
+/*This code on styling input forms I got from W3 Schools and adapted*/
+input[type=text] {
+    width: 10%;
+    padding: 3px 5px;
+    margin: 4px 0;
+    box-sizing: border-box;
+    border: 2px solid darkseagreen;
+    
+}
+
+/*This code on styling buttons I got from W3 Schools and adapted*/
+button {
+    background-color: darkseagreen;
+    border: none;
+    color: white;
+    padding: 7px 9px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+
+button, input[type="checkbox"] + label
+{
+  font-family : 'Slabo 13px', Times, serif;
+  font-size   : 100%;
+}
+
+
+
+/* The idea of using a list of fonts (with fallback fonts if the main one doesnt' work) I got from W3 Schools*/
+p, h1, h2 {font-family: 'Slabo 13px', Times, serif;}
+ol {font-family:"Slabo 13px", Times, serif;}
+
+/*NB using 'vw' instead of pixel size for font sizes (to make the text size responsive) I got from W3 Schools*/
+h1 {
+font-style: italic;
+text-align: center;
+font-size: 6vw;
+color:black;}
+
+p{font-size: 1.5vw;}
+
+/*   NB this table style code is from the sample file readColorData_styled from Practical 6 - and then adapted -->
+*/
+
+table, th, td {
+    border: 1px solid darkseagreen;
+    border-collapse: collapse;
+    padding: 12px;
+    font-family: 'Slabo 13px', Times, serif;
+}
+     
+caption{font-family: 'Slabo 13px', Times, serif;
+    font-size: 3vw;
+    
+    
+}
+
+
+     table{
+         clear:both;
+         float:left;
+        margin:50px;}    
+     
+th {
+    background-color: darkseagreen;
+    color: white;
+}
+      
+table tr:nth-child(odd) {
+    background-color: #f1f1f1;
+}
+table tr:nth-child(even) {
+    background-color: #ffffff;
+}
+
+
+

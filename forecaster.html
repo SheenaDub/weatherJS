@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+
+<html> 
+<head>    
+<meta name="viewport" content="width=device-width, initial-scale=1.0">    
+<meta charset="UTF-8">
+   
+<link href='https://fonts.googleapis.com/css?family=Slabo 13px' rel='stylesheet'/> 
+<title>Dublin Forecaster</title>  
+       
+<link rel="stylesheet" type="text/css" href="sheenastylesheet.css">    
+
+</head>   
+    
+<body>
+    <header><h1> Dublin Forecaster</h1></header>
+
+  <section>  
+    
+
+<div id="googleMap" style="width:420px;height:500px;float:left;margin-right:20px;"></div> 
+<p>Welcome to Dublin Forecaster. We provide weather information for Dublin for any period from one to five days. 
+    We can also provide more detailed information if you wish - just check the boxes below and we will include data on pressure, humidity and wind speed if you want these included in the forecast.</p>
+      <p>Also, if you wish for more detail on any particular day, just click the 'more info' button for each date - then scroll down and you will see a breakdown of the weather for that day into three-hour blocks</p>
+      
+
+      
+<script>   
+    
+function myMap() {
+  var myCenter = new google.maps.LatLng(53.34,-6.26);
+  var mapCanvas = document.getElementById("googleMap");
+  var mapOptions = {center: myCenter, zoom: 6};
+  var map = new google.maps.Map(mapCanvas, mapOptions);
+  var marker = new google.maps.Marker({position:myCenter});
+  marker.setMap(map);
+}  </script>
+ <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDCJ3N808qMKwu32fTVlpUaG8K4GSPo4qs&callback=myMap"></script>   
+    
+  
+<script>
+  
+
+var xmlhttp = new XMLHttpRequest();
+var url = "Daily.json";
+
+xmlhttp.onreadystatechange = function() {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { 
+        var parsedObj = JSON.parse(xmlhttp.responseText);    }
+};
+
+xmlhttp.open("GET", url, true);
+xmlhttp.send();
+
+   
+function displayJSON(obj) {
+    console.log(obj);
+    console.log(typeof obj);
+    var dailyArray = obj.list;
+    console.log(dailyArray);
+    console.log(typeof dailyArray);
+    var num1 = document.getElementById("number1").value;
+    var pressurebox = document.getElementById("pressurebox").value;
+    var humiditybox = document.getElementById("humiditybox").value;
+    var speedbox = document.getElementById("speedbox").value;
+    var weatherInfo = "<table> <caption>Your forecast</caption>";
+    
+    
+    
+    var buttonArray = ["<button type='button' onclick='tryButton1()'>More info </button>", 
+                       "<button type='button' onclick='tryButton2()'>More info</button>",
+                       "<button type='button' onclick='tryButton3()'>More info</button>",
+                       "<button type='button' onclick='tryButton4()'>More info</button>",
+                       "<button type='button' onclick='tryButton5()'>More info</button>"]
+    
+    weatherInfo += "<tr><th>Date </th><th>Weather </th><th>Outlook</th><th>Details</th><th>Min temp</th><th>Max temp</th> <th>Pressure </th> <th>Humidity </th> <th>Wind speed </th> <th>More details </th></tr>"; 
+    
+    
+
+
+    for (var i=0; i < num1; i++) 
+    {     
+        var main = dailyArray[i].weather[0].main;
+        var description = dailyArray[i].weather[0].description;   
+        var tempmin = dailyArray[i].temp.min; 
+        var tempmax = dailyArray[i].temp.max;
+        var pressure = dailyArray[i].pressure;
+        var humidity = dailyArray[i].humidity; 
+        var speed = dailyArray[i].speed;
+        var day = i+1;
+        var yespressure = " ";
+        var yeshumidity = " ";
+        var yesspeed = " ";
+        var button = buttonArray[i];
+        
+
+        var timestamp = dailyArray[i].dt;
+        var date = new Date(timestamp * 1000);
+        var editeddate = date.toDateString();
+        
+     
+         if (document.getElementById("pressurebox").checked)
+            {yespressure += pressure;}
+        if (document.getElementById("humiditybox").checked)
+            {yeshumidity += humidity;}
+        if (document.getElementById("speedbox").checked)
+            {yesspeed += speed;  }
+        
+        
+           weatherInfo += "<tr> <td>" + editeddate + "</td><td>" + main + "</td><td>" + "<img src='/icons/10d.png'>" + "</td><td>" + description + "</td><td>" + tempmin + "</td><td>" + tempmax + "</td> <td>"  + yespressure + "</td> <td>"  + yeshumidity + "</td> <td>" + yesspeed + "</td> <td>" + button + "</td>  </tr>";
+        
+        
+    }
+     
+    weatherInfo += "</table>"; 
+    document.getElementById("id01").innerHTML = weatherInfo;
+      
+}      
+       
+  
+  
+    
+function tryNumbers(){
+        document.getElementById('demo').innerHTML = ' ';
+        var num1 = document.getElementById("number1").value;
+        var pressure = document.getElementById("number1").value;
+        if(parseInt(num1) == 1)  
+        { 
+        var parsedObj = JSON.parse(xmlhttp.responseText);     
+        displayJSON(parsedObj); 
+        }   
+    
+        else if(parseInt(num1) == 2) 
+        {
+         var parsedObj = JSON.parse(xmlhttp.responseText);     
+        displayJSON(parsedObj);
+        } 
+    
+        else if (parseInt(num1) == 3)
+        {
+         var parsedObj = JSON.parse(xmlhttp.responseText);     
+        displayJSON(parsedObj);
+        } 
+    
+         else if (parseInt(num1) == 4)
+        {
+            var parsedObj = JSON.parse(xmlhttp.responseText);     
+        displayJSON(parsedObj);}
+            
+        else if (parseInt(num1) == 5)
+        {
+            var parsedObj = JSON.parse(xmlhttp.responseText);     
+        displayJSON(parsedObj);}
+    
+        else
+        {
+            alert("You must enter a number from 1 to 5! Please try again")
+
+        }  
+    }     
+    
+    
+//    new XMLHttpRequest for detailed JSON
+var xmlhttp1 = new XMLHttpRequest();
+var url1 = "Detailed.json";
+
+xmlhttp1.onreadystatechange = function() {
+    if (xmlhttp1.readyState == 4 && xmlhttp1.status == 200) {
+ 
+        var parsedObj = JSON.parse(xmlhttp1.responseText);             
+}
+}
+
+xmlhttp1.open("GET", url1, true);
+xmlhttp1.send();
+
+function detaildisplay1JSON(obj) {
+    var detailArray = obj.list;
+    var detailWeatherInfo = "<table> <caption>Your detailed forecast</caption>";
+    
+    detailWeatherInfo += "<tr><th>From </th><th>Weather </th><th>Outlook </th><th>Details</th><th>Min Temp </th><th>Max temp</th><th> Pressure</th> <th> Humidity </th><th> Wind Speed </th><th> Wind Degree </th></tr>";   
+   
+    for (var i=0; i < 4; i++) 
+    {
+    
+        var datetime = detailArray[i].dt_txt;
+        var mainweather = detailArray[i].weather[0].main;
+        var weathdescription = detailArray[i].weather[0].description;   
+        var tempmin = detailArray[i].main.temp_min; 
+        var tempmax = detailArray[i].main.temp_max;
+        var pressure = detailArray[i].main.pressure;
+        var humidity = detailArray[i].main.humidity; 
+        var windspeed = detailArray[i].wind.speed;
+        var winddegree = detailArray[i].wind.deg;
+        var icon = "icon here";
+        
+        if (weathdescription=="light rain" || weathdescription== "moderate rain"){icon="<img src='/icons/10d.png'>"};
+        
+        
+     
+        detailWeatherInfo += "<tr><td>" + datetime + "</td><td>" + mainweather + "</td><td>"+ icon + "</td><td>" + weathdescription + "</td><td>" + tempmin + "</td><td>" + tempmax + "</td><td>" + pressure +"</td><td>"+ humidity +"</td><td>" +windspeed+"</td> <td>"+ winddegree+ "</td></tr>";
+        
+    }
+    detailWeatherInfo += "</table>"; 
+    document.getElementById("A").innerHTML = detailWeatherInfo;
+       
+}    
+     
+function detaildisplay2JSON(obj) {
+    var detailArray = obj.list;
+    var detailWeatherInfo = "<table> <caption>Your detailed forecast</caption>";
+    
+    detailWeatherInfo += "<tr><th>From </th><th>Weather </th><th>Outlook </th><th>Details</th><th>Min Temp </th><th>Max temp</th><th> Pressure</th> <th> Humidity </th><th> Wind Speed </th><th> Wind Degree </th></tr>";   
+  
+    for (var i=4; i < 12; i++) 
+    {
+    
+        var datetime = detailArray[i].dt_txt;
+        var mainweather = detailArray[i].weather[0].main;
+        var weathdescription = detailArray[i].weather[0].description;   
+        var tempmin = detailArray[i].main.temp_min; 
+        var tempmax = detailArray[i].main.temp_max;
+        var pressure = detailArray[i].main.pressure;
+        var humidity = detailArray[i].main.humidity; 
+        var windspeed = detailArray[i].wind.speed;
+        var winddegree = detailArray[i].wind.deg;
+        var icon = "icon here";
+        
+        if (weathdescription=="light rain" || weathdescription== "moderate rain"){icon="<img src='/icons/10d.png'>"};
+        if (weathdescription=="broken clouds"){icon="<img src='/icons/04d.png'>"};
+     
+         detailWeatherInfo += "<tr><td>" + datetime + "</td><td>" + mainweather + "</td><td>"+ icon + "</td><td>" + weathdescription + "</td><td>" + tempmin + "</td><td>" + tempmax + "</td><td>" + pressure +"</td><td>"+ humidity +"</td><td>" +windspeed+"</td> <td>"+ winddegree+ "</td></tr>";
+        
+    }
+    detailWeatherInfo += "</table>"; 
+    document.getElementById("B").innerHTML = detailWeatherInfo;      
+}   
+       
+ function detaildisplay3JSON(obj) {
+    var detailArray = obj.list;
+    var detailWeatherInfo = "<table> <caption>Your detailed forecast</caption>";
+    
+    detailWeatherInfo += "<tr><th>From </th><th>Weather </th><th>Outlook </th><th>Details</th><th>Min Temp </th><th>Max temp</th><th> Pressure</th> <th> Humidity </th><th> Wind Speed </th><th> Wind Degree </th></tr>";   
+    
+    for (var i=12; i < 20; i++) 
+    {
+        var datetime = detailArray[i].dt_txt;
+        var mainweather = detailArray[i].weather[0].main;
+        var weathdescription = detailArray[i].weather[0].description;   
+        var tempmin = detailArray[i].main.temp_min; 
+        var tempmax = detailArray[i].main.temp_max;
+        var pressure = detailArray[i].main.pressure;
+        var humidity = detailArray[i].main.humidity; 
+        var windspeed = detailArray[i].wind.speed;
+        var winddegree = detailArray[i].wind.deg;
+        
+        
+        var icon = "icon here";
+        
+        if (weathdescription=="light rain"){icon="<img src='/icons/10d.png'>"};
+        
+        
+        
+     
+        detailWeatherInfo += "<tr><td>" + datetime + "</td><td>" + mainweather + "</td><td>"+ icon + "</td><td>" + weathdescription + "</td><td>" + tempmin + "</td><td>" + tempmax + "</td><td>" + pressure +"</td><td>"+ humidity +"</td><td>" +windspeed+"</td> <td>"+ winddegree+ "</td></tr>";
+        
+    }
+    
+    detailWeatherInfo += "</table>"; 
+    document.getElementById("C").innerHTML = detailWeatherInfo;      
+}     
+     
+function detaildisplay4JSON(obj) {
+    var detailArray = obj.list;
+    var detailWeatherInfo = "<table> <caption>Your detailed forecast</caption>";
+    
+    detailWeatherInfo += "<tr><th>From </th><th>Weather </th><th>Outlook </th><th>Details</th><th>Min Temp </th><th>Max temp</th><th> Pressure</th> <th> Humidity </th><th> Wind Speed </th><th> Wind Degree </th></tr>";   
+    
+    for (var i=20; i < 28; i++) 
+    {
+        var datetime = detailArray[i].dt_txt;
+        var mainweather = detailArray[i].weather[0].main;
+        var weathdescription = detailArray[i].weather[0].description;   
+        var tempmin = detailArray[i].main.temp_min; 
+        var tempmax = detailArray[i].main.temp_max;
+        var pressure = detailArray[i].main.pressure;
+        var humidity = detailArray[i].main.humidity; 
+        var windspeed = detailArray[i].wind.speed;
+        var winddegree = detailArray[i].wind.deg;
+        
+         var icon = "icon here";
+        
+        if (weathdescription=="light rain"){icon="<img src='/icons/10d.png'>"};
+        if (weathdescription=="broken clouds"|| weathdescription=="overcast clouds"){icon="<img src='/icons/04d.png'>"};
+        if (weathdescription=="few clouds"){icon="<img src='/icons/02d.png'>"};
+        
+        
+        
+    
+     
+        detailWeatherInfo += "<tr><td>" + datetime + "</td><td>" + mainweather + "</td><td>"+ icon + "</td><td>" + weathdescription + "</td><td>" + tempmin + "</td><td>" + tempmax + "</td><td>" + pressure +"</td><td>"+ humidity +"</td><td>" +windspeed+"</td> <td>"+ winddegree+ "</td></tr>";
+        
+    }
+    
+    detailWeatherInfo += "</table>"; 
+    document.getElementById("D").innerHTML = detailWeatherInfo;      
+}   
+ 
+function detaildisplay5JSON(obj) {
+    var detailArray = obj.list;
+    var detailWeatherInfo = "<table> <caption>Your detailed forecast</caption>";
+    
+    detailWeatherInfo += "<tr><th>From </th><th>Weather </th><th>Outlook </th><th>Details</th><th>Min Temp </th><th>Max temp</th><th> Pressure</th> <th> Humidity </th><th> Wind Speed </th><th> Wind Degree </th></tr>";   
+    
+    for (var i=28; i < 36; i++) 
+    {
+        var datetime = detailArray[i].dt_txt;
+        var mainweather = detailArray[i].weather[0].main;
+        var weathdescription = detailArray[i].weather[0].description;   
+        var tempmin = detailArray[i].main.temp_min; 
+        var tempmax = detailArray[i].main.temp_max;
+        var pressure = detailArray[i].main.pressure;
+        var humidity = detailArray[i].main.humidity; 
+        var windspeed = detailArray[i].wind.speed;
+        var winddegree = detailArray[i].wind.deg;
+        
+        
+        var icon = "icon here";
+        
+        if (weathdescription=="light rain" || weathdescription== "moderate rain"){icon="<img src='/icons/10d.png'>"};
+        if (weathdescription=="scattered clouds"){icon="<img src='/icons/03d.png'>"};
+        
+        
+     
+        detailWeatherInfo += "<tr><td>" + datetime + "</td><td>" + mainweather + "</td><td>"+ icon + "</td><td>" + weathdescription + "</td><td>" + tempmin + "</td><td>" + tempmax + "</td><td>" + pressure +"</td><td>"+ humidity +"</td><td>" +windspeed+"</td> <td>"+ winddegree+ "</td></tr>";
+        
+    }
+    
+    detailWeatherInfo += "</table>"; 
+    document.getElementById("E").innerHTML = detailWeatherInfo;      
+} 
+      
+   
+    
+    function tryButton1(){
+    
+    var parsedObj = JSON.parse(xmlhttp1.responseText);     
+        detaildisplay1JSON(parsedObj);
+    }
+    function tryButton2(){
+    
+    var parsedObj = JSON.parse(xmlhttp1.responseText);     
+        detaildisplay2JSON(parsedObj);
+    }
+    function tryButton3(){
+    
+    var parsedObj = JSON.parse(xmlhttp1.responseText);     
+        detaildisplay3JSON(parsedObj);
+    }
+    function tryButton4(){
+    
+    var parsedObj = JSON.parse(xmlhttp1.responseText);     
+        detaildisplay4JSON(parsedObj);
+    }
+    function tryButton5(){
+    
+    var parsedObj = JSON.parse(xmlhttp1.responseText);     
+        detaildisplay5JSON(parsedObj);
+    }
+    
+   
+    
+    
+      </script>
+
+
+        
+
+   
+    
+    
+<br>
+    <form>
+  Number of days:<br>
+  <input type=text id="number1" value='0'>
+    
+  <br>
+     
+
+
+<p>Please include information about: </p>
+        
+        
+        
+       
+<input type="checkbox" id="pressurebox"> <label for=pressurebox> Pressure </label>
+<br>
+<input type="checkbox" id="humiditybox"> <label for=humiditybox> Humidity </label>
+<br>
+<input type="checkbox" id="speedbox"> <label for=speedbox> Wind speed </label>
+<br><br>
+<button type='button' onclick='tryNumbers()'>Submit</button>
+</form>    
+    
+
+    
+    
+<br>    
+<p id='demo'></p>
+
+ <div id="id01"> </div>  
+<div id="id02"> </div>
+  
+<div id="A"></div>
+<div id="B"></div>
+<div id="C"></div>
+<div id="D"></div>   
+<div id="E"></div>       
+      
+
+   </section>  
+    
+    
+    
+<footer></footer>
+    
+    
+    
+    
+</body>
+</html>
